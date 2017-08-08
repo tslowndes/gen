@@ -91,7 +91,7 @@ def write_solo(AUV, config):
     wr.writerows(temp)
     f.close()
 
-def  write_proof(AUV, config):
+def  write_proof(AUV, config, fn = ' '):
     if config.sim_type == 1:
         if config.sim_sub_type == 1:
             filename = 'validation/vld_dive.csv'
@@ -101,7 +101,10 @@ def  write_proof(AUV, config):
                 filename = 'validation/vld_vel.csv'
 
     elif config.sim_type == 0:
-        filename = 'results/sim_%03i' % config.no + '/proof.csv'
+        if fn == ' ':
+            filename = 'results/sim_%03i' % config.no + '/proof.csv'
+        else:
+            filename = fn
     if getpass.getuser() == 'tsl1g12' and os.path.exists('/noc/users/tsl1g12'):
         f = open(filename, 'wb')
     else:
