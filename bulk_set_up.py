@@ -1,5 +1,6 @@
 from Config_class import *
 import csv
+import numpy as np
 
 config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
 attributes = [i for i in dir(config) if '__' not in i]
@@ -9,10 +10,10 @@ sim_no = 0
 
 for i in range(swarm_size_range[0], swarm_size_range[1]):
     config.no = sim_no
-    config.repeats = 50
+    config.repeats = 20
     config.run_time = 6000
     config.swarm_size = i
-    config.random_seed = 42 #np.random.randint(100)
+    config.seed = np.random.randint(100)
     filename = '../Voronoi/3D/config/sim_config_%03i.csv' % sim_no
 
     f = open(filename, 'w', newline='')
