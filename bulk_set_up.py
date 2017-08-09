@@ -12,6 +12,7 @@ for i in range(swarm_size_range[0], swarm_size_range[1]):
     config.repeats = 50
     config.run_time = 6000
     config.swarm_size = i
+    config.random_seed = 42 #np.random.randint(100)
     filename = '../Voronoi/3D/config/sim_config_%03i.csv' % sim_no
 
     f = open(filename, 'w', newline='')
