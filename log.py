@@ -15,4 +15,5 @@ class Log:
         self.x_demand = []
         self.y_demand = []
         self.z_demand = []
+        self.state = []
 

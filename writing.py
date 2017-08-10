@@ -120,7 +120,7 @@ def  write_proof(AUV, config, fn = ' '):
     headers.append('wp_y')
     headers.append('wp_z')
     headers.append('dist_to_wp')
-    headers.append('t_uw')
+    headers.append('state')
 
     headers.append('v')
     headers.append('v_demand')
@@ -139,7 +139,7 @@ def  write_proof(AUV, config, fn = ' '):
     headers.append('sat_times')
 
     wr.writerow(headers)
-
+    start_ind = 0
     temp = [[] for i in range(len(AUV.log.x))]
     for i in range(len(AUV.log.x)):
         # time
@@ -155,12 +155,7 @@ def  write_proof(AUV, config, fn = ' '):
         temp[i].append(dist([AUV.log.x[i], AUV.log.y[i], AUV.log.z[i]], [AUV.log.x_demand[i], AUV.log.y_demand[i], AUV.log.z_demand[i]], 3))
 
         # time spent underwater
-        if i != 0 and config.sim_sub_type == 1:
-            if AUV.log.z_demand[i] == config.dive_depth and AUV.log.z_demand[i-1] == 0:
-                    start_ind = i
-            temp[i].append(i - start_ind)
-        else:
-            temp[i].append(0)
+        temp[i].append(AUV.log.state[i])
 
         # velocity
         temp[i].append(AUV.log.v[i])
