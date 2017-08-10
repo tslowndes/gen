@@ -1,5 +1,6 @@
 from Config_class import *
 import csv
+import numpy as np
 
 def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
