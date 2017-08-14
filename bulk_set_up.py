@@ -12,10 +12,10 @@ def main_set_up():
         config.repeats = 50
         config.run_time = 6000
         config.swarm_size = i
-        config.random_seed = np.random.randint(100, size=config.repeats)
+        config.seed = list(np.random.randint(100, size=config.repeats))
 
         filename = '../Voronoi/3D/config/sim_config_%03i.csv' % sim_no
-        write_class_attributes(config)
+        write_class_attributes(config, filename)
 
         sim_no += 1
 
