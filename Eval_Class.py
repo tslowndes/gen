@@ -89,7 +89,7 @@ class Evaluator:
     def dist_to_target(self, Flock):
         dists = []
         for AUV in Flock:
-            dists.append(dist([AUV.x, AUV.y, AUV.z], AUV.waypoints[AUV.current_waypoint], 3))
+            dists.append(dist([AUV.x, AUV.y, AUV.z], AUV.waypoints[0], 3))
         self.dists_to_target.append(np.mean(dists))
 
     def settling_time(self, config):

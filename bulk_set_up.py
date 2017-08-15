@@ -4,13 +4,13 @@ import numpy as np
 
 def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
-    swarm_size_range = (5, 31)
+    swarm_size_range = (10, 11)
     sim_no = 0
 
     for i in range(swarm_size_range[0], swarm_size_range[1]):
         config.no = sim_no
         config.repeats = 50
-        config.run_time = 6000
+        config.run_time = 5000
         config.swarm_size = i
         config.seed = list(np.random.randint(100, size=config.repeats))
 
