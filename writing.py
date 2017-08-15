@@ -121,6 +121,7 @@ def  write_proof(AUV, config, fn = ' '):
     headers.append('wp_z')
     headers.append('dist_to_wp')
     headers.append('state')
+    headers.append('time_uw')
 
     headers.append('v')
     headers.append('v_demand')
@@ -156,6 +157,7 @@ def  write_proof(AUV, config, fn = ' '):
 
         # time spent underwater
         temp[i].append(AUV.log.state[i])
+        temp[i].append(AUV.log.time_uw[i])
 
         # velocity
         temp[i].append(AUV.log.v[i])

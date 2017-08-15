@@ -16,4 +16,5 @@ class Log:
         self.y_demand = []
         self.z_demand = []
         self.state = []
+        self.time_uw[]
 
