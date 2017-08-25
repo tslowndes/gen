@@ -11,7 +11,7 @@ import os
 def get_file_number(path):
     inds = []
     for filename in os.listdir(path):
-        if filename.startswith("result"):
+        if filename.endswith(".sbd"):
             print(filename)
             i = filename.split('_')[1].split('.')[0]
             print(i)

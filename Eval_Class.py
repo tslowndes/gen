@@ -74,7 +74,7 @@ class Evaluator:
             loc_dists.append(np.mean(dists))
             # Builds a list of the number of voronoi neighbours for each vehicle in the flock
             n_regs.append(len(n_reg))
-        self.flock_dists.append(np.mean(loc_dists))
+        self.flock_dists.append(np.median(loc_dists))
         self.voronoi_neighbours.append(np.mean(n_regs))
 
     # How many AUVs are in the feature - idea of how well feature tracking is working
