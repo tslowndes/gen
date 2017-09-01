@@ -22,10 +22,10 @@ def get_file_number(path):
         return 0
 
 
-def write_results(Flock, Evaluate, config):
+def write_results(Flock, Evaluate, config, repeat):
     filename = 'results/sim_%03i' % config.no
     count = get_file_number(filename)
-    filename = filename + '/result_%i.csv' % count
+    filename = filename + '/result_%i.csv' % repeat
     print(filename)
     if getpass.getuser() == 'tsl1g12' and os.path.exists('/noc/users/tsl1g12'):
         f = open(filename, 'wb')
@@ -102,13 +102,15 @@ def  write_proof(AUV, config, fn = ' '):
 
     elif config.sim_type == 0:
         if fn == ' ':
-            filename = 'results/sim_%03i' % config.no + '/proof.csv'
+            filename = 'results/sim_%03i' % config.no + '/proof_%i.csv' % AUV.ID
         else:
             filename = fn
+
     if getpass.getuser() == 'tsl1g12' and os.path.exists('/noc/users/tsl1g12'):
         f = open(filename, 'wb')
     else:
         f = open(filename, 'w', newline='')
+
     wr = csv.writer(f)
     headers = ['t']
 
@@ -153,7 +155,7 @@ def  write_proof(AUV, config, fn = ' '):
         temp[i].append(AUV.log.x_demand[i])
         temp[i].append(AUV.log.y_demand[i])
         temp[i].append(AUV.log.z_demand[i])
-        temp[i].append(dist([AUV.log.x[i], AUV.log.y[i], AUV.log.z[i]], [AUV.log.x_demand[i], AUV.log.y_demand[i], AUV.log.z_demand[i]], 3))
+        temp[i].append(dist([AUV.log.x[i], AUV.log.y[i], AUV.log.z[i]], [AUV.log.x_demand[i], AUV.log.y_demand[i], AUV.log.z_demand[i]], 2))
 
         # time spent underwater
         temp[i].append(AUV.log.state[i])

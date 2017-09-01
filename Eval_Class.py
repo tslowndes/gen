@@ -71,11 +71,11 @@ class Evaluator:
 
             if 0 in dists:
                 dists.remove(0)
-            loc_dists.append(np.mean(dists))
+            loc_dists.append(np.median(dists))
             # Builds a list of the number of voronoi neighbours for each vehicle in the flock
             n_regs.append(len(n_reg))
         self.flock_dists.append(np.median(loc_dists))
-        self.voronoi_neighbours.append(np.mean(n_regs))
+        self.voronoi_neighbours.append(np.median(n_regs))
 
     # How many AUVs are in the feature - idea of how well feature tracking is working
     def AUV_in_feature(self, Flock):
