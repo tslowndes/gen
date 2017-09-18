@@ -114,12 +114,12 @@ def  write_proof(AUV, config, fn = ' '):
     wr = csv.writer(f)
     headers = ['t']
 
-    headers.append('x')
-    headers.append('y')
+    headers.append('lon')
+    headers.append('lat')
     headers.append('z')
 
-    headers.append('wp_x')
-    headers.append('wp_y')
+    headers.append('wp_lon')
+    headers.append('wp_lat')
     headers.append('wp_z')
     headers.append('dist_to_wp')
     headers.append('state')
@@ -148,8 +148,8 @@ def  write_proof(AUV, config, fn = ' '):
         # time
         temp[i].append(i)
         # position
-        temp[i].append(AUV.log.x[i])
-        temp[i].append(AUV.log.y[i])
+        temp[i].append(AUV.log.lon[i])
+        temp[i].append(AUV.log.lat[i])
         temp[i].append(AUV.log.z[i])
         # current waypoint
         temp[i].append(AUV.log.x_demand[i])
