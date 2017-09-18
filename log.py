@@ -17,4 +17,6 @@ class Log:
         self.z_demand = []
         self.state = []
         self.time_uw = []
+        self.lat = []
+        self.lon = []
 
