@@ -17,10 +17,10 @@ def find_dist2(pos1, pos2):
     # haversine formula
     dlon = lon2 - lon1
     dlat = lat2 - lat1
-    a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
-    c = 2 * np.arcsin(np.sqrt(a))
+    a = (np.sin(dlat / 2)** 2) + (np.cos(lat1) * np.cos(lat2) * (np.sin(dlon / 2) ** 2))
     r = 6378.137 * 1000  # Radius of earth in kilometers
-    return c * r
+    d = 2 * r * np.arcsin(np.sqrt(a))
+    return d
 
 
 def find_dist3(pos1, pos2):
