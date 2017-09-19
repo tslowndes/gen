@@ -7,7 +7,7 @@ from dist import dist
 from find_dir import *
 import getpass
 import os
-from latlon_util import find_dir, find_dist
+from latlon_util import find_dir, find_dist2, find_dist3
 
 def get_file_number(path):
     inds = []
@@ -144,8 +144,8 @@ def  write_proof(AUV, config, fn = ' '):
 
     wr.writerow(headers)
     start_ind = 0
-    temp = [[] for i in range(len(AUV.log.x))]
-    for i in range(len(AUV.log.x)):
+    temp = [[] for i in range(len(AUV.log.lon))]
+    for i in range(len(AUV.log.lon)):
         # time
         temp[i].append(i)
         # position
@@ -153,8 +153,8 @@ def  write_proof(AUV, config, fn = ' '):
         temp[i].append(AUV.log.lat[i])
         temp[i].append(AUV.log.z[i])
         # current waypoint
-        temp[i].append(AUV.log.x_demand[i])
-        temp[i].append(AUV.log.y_demand[i])
+        temp[i].append(AUV.log.lon_demand[i])
+        temp[i].append(AUV.log.lat_demand[i])
         temp[i].append(AUV.log.z_demand[i])
         dist2wp = find_dist3((AUV.log.lon[i], AUV.log.lat[i], AUV.log.z[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i], AUV.log.z_demand[i]))
         temp[i].append(dist2wp)
@@ -170,14 +170,14 @@ def  write_proof(AUV, config, fn = ' '):
             temp[i].append(AUV.log.v[0])
         else:
             # Calculated velocity
-            temp[i].append(find_dist3((AUV.log.x[i], AUV.log.y[i], AUV.log.z[i]), (AUV.log.x[i - 1], AUV.log.y[i - 1], AUV.log.z[i - 1]], 3) / 0.5))
+            temp[i].append(find_dist3((AUV.log.lon[i], AUV.log.lat[i], AUV.log.z[i]), (AUV.log.lon[i - 1], AUV.log.lat[i - 1], AUV.log.z[i - 1])) / 0.5)
 
         #### Yaw
         temp[i].append(AUV.log.yaw[i])
         temp[i].append(AUV.log.yaw_demand[i])
         #### Calculated yaw demand
-        if AUV.log.x[i] != AUV.log.x_demand[i] or AUV.log.y[i] != AUV.log.y_demand[i]:
-            temp[i].append(find_dir((AUV.log.x[i], AUV.log.y[i]), (AUV.log.x_demand[i], AUV.log.y_demand[i])))
+        if AUV.log.lon[i] != AUV.log.lon_demand[i] or AUV.log.lat[i] != AUV.log.lat_demand[i]:
+            temp[i].append(find_dir((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i])))
         else:
             temp[i].append(temp[i][-1])
 
@@ -198,7 +198,7 @@ def  write_proof(AUV, config, fn = ' '):
         temp[i].append(AUV.log.pitch_demand[i])
 
         # Pitch demand calc
-        dist_xy = find_dist2((AUV.log.x[i], AUV.log.y[i]), (AUV.log.x_demand[i], AUV.log.y_demand[i]))
+        dist_xy = find_dist2((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i]))
         if dist_xy == 0 and AUV.log.z[i] == AUV.log.z_demand[i]:
             p_demand = 0
         elif dist_xy == 0 and AUV.log.z[i] != AUV.log.z_demand[i]:
