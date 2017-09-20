@@ -1,12 +1,15 @@
 import numpy as np
-
+from math import floor
 def find_dir(pos1, pos2):
     lon1, lat1 = np.radians(pos1)
     lon2, lat2 = np.radians(pos2)
-    X = np.cos(lat2) * np.sin(abs(lon1 - lon2))
-    Y = (np.cos(lat1) * np.sin(lat2)) - (np.sin(lat1) * np.cos(lat2) * np.cos(abs(lon1 - lon2)))
-    dir = np.arctan2(X, Y)
-    return np.degrees(dir)
+    Y = np.cos(lat2) * np.sin(lon2 - lon1)
+    X = (np.cos(lat1) * np.sin(lat2)) - (np.sin(lat1) * np.cos(lat2) * np.cos(lon2 - lon1))
+    dir = np.arctan2(Y, X)
+    dir = np.degrees(dir) + 360 % 360
+    if dir < 0:
+        dir = dir + 360
+    return dir
 
 def find_dist2(pos1, pos2):
     """
@@ -18,7 +21,7 @@ def find_dist2(pos1, pos2):
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = (np.sin(dlat / 2)** 2) + (np.cos(lat1) * np.cos(lat2) * (np.sin(dlon / 2) ** 2))
-    r = 6378.137 * 1000  # Radius of earth in kilometers
+    r = 6371 * 1000  # Radius of earth in kilometers
     d = 2 * r * np.arcsin(np.sqrt(a))
     return d
 

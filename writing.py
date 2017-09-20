@@ -156,7 +156,7 @@ def  write_proof(AUV, config, fn = ' '):
         temp[i].append(AUV.log.lon_demand[i])
         temp[i].append(AUV.log.lat_demand[i])
         temp[i].append(AUV.log.z_demand[i])
-        dist2wp = find_dist3((AUV.log.lon[i], AUV.log.lat[i], AUV.log.z[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i], AUV.log.z_demand[i]))
+        dist2wp = find_dist2((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i]))
         temp[i].append(dist2wp)
 
         # time spent underwater
