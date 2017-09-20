@@ -21,7 +21,7 @@ def find_dist2(pos1, pos2):
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = (np.sin(dlat / 2)** 2) + (np.cos(lat1) * np.cos(lat2) * (np.sin(dlon / 2) ** 2))
-    r = 6371 * 1000  # Radius of earth in kilometers
+    r = 6378.137 * 1000  # Radius of earth in kilometers
     d = 2 * r * np.arcsin(np.sqrt(a))
     return d
 
