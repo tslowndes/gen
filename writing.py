@@ -27,59 +27,21 @@ def write_results(Flock, Evaluate, config, repeat):
     filename = 'results/sim_%03i' % config.no
     filename = filename + '/result_%i.csv' % repeat
     print(filename)
-    # if getpass.getuser() == 'tsl1g12' and os.path.exists('/noc/users/tsl1g12'):
-    #     f = open(filename, 'wb')
-    # else:
-    #     f = open(filename, 'w', newline='')
-    # wr = csv.writer(f)
-    print(len(Evaluate.flock_dists))
-    print(len(Evaluate.AUVs_in_feature))
-    print(len(Evaluate.voronoi_neighbours))
-    print(len(Evaluate.dists_to_target))
-    print(len([i for i in range(config.run_time)]))
+
     dfresults = {'t':[i for i in range(config.run_time)],
                               'flock_dists':Evaluate.flock_dists,
                               'AUVs in Feature':Evaluate.AUVs_in_feature,
                               'vor_neighbours':Evaluate.voronoi_neighbours,
                               'dist_to_target':Evaluate.dists_to_target}
 
-    # headers = ['t', 'flock_dists', 'AUVs in Feature', 'No of Vor Nbours', 'dist_to_target']
-    # for AUV in Flock:
-    #     headers.append('x%i' % AUV.ID)
-    #     headers.append('y%i' % AUV.ID)
-    #     headers.append('z%i' % AUV.ID)
-    #     headers.append('m%i' % AUV.ID)
-    # wr.writerow(headers)
-    #
-    # temp = [[i for i in range(len(Flock[0].log.x))]]
-    # Evaluate.flock_dists.append(0)
-    # Evaluate.AUVs_in_feature.append(0)
-    # Evaluate.voronoi_neighbours.append(0)
-    # Evaluate.dists_to_target.append(0)
-    # temp.append(Evaluate.flock_dists)
-    # temp.append(Evaluate.AUVs_in_feature)
-    # temp.append(Evaluate.voronoi_neighbours)
-    # temp.append(Evaluate.dists_to_target)
-
     for AUV in Flock:
-        print(len(AUV.log.x))
         dfresults.update({'x%i' % AUV.ID:AUV.log.x[0:-1]})
         dfresults.update({'y%i' % AUV.ID:AUV.log.y[0:-1]})
         dfresults.update({'z%i' % AUV.ID:AUV.log.z[0:-1]})
         dfresults.update({'m%i' % AUV.ID:AUV.log.measurement[0:-1]})
-        # temp.append(AUV.log.y)
-        # temp.append(AUV.log.z)
-        # temp.append(AUV.log.measurement)
+
 
     pd.DataFrame(dfresults).to_csv(filename)
-
-    # temp = np.array(temp)
-    # temp = np.transpose(temp)
-    #
-    # for i in range(len(temp)):
-    #     wr.writerow(temp[i])
-    #
-    # f.close()
 
 def write_solo(AUV, config):
     filename = 'results/sim_%03i' % config.no + '/solo.csv'
