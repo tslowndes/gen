@@ -33,3 +33,18 @@ def find_dist3(pos1, pos2):
     dist_xy = find_dist2((pos1[0], pos1[1]), (pos2[0], pos2[1]))
     dist_xyz = np.sqrt((dist_xy ** 2) + ((pos1[2] - pos2[2])**2))
     return dist_xyz
+
+def find_relative(datum, loc):
+    """
+    Finds the position of loc relative to datum in x/y meter coordinates.
+    """
+    loc1 = datum
+    loc2 = loc
+
+    # finds change in lon and lat using haversine formula to determine loc relative to datum
+    dlon = find_dist2(loc1, (loc2[0], loc1[1]))
+    dlat = find_dist2(loc1, (loc1[0], loc2[1]))
+
+    relloc2 = (dlon, dlat)
+
+    return relloc2

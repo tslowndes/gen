@@ -40,7 +40,6 @@ def write_results(Flock, Evaluate, config, repeat):
         dfresults.update({'z%i' % AUV.ID:AUV.log.z[0:-1]})
         dfresults.update({'m%i' % AUV.ID:AUV.log.measurement[0:-1]})
 
-
     pd.DataFrame(dfresults).to_csv(filename)
 
 def write_solo(AUV, config):
