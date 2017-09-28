@@ -37,11 +37,11 @@ def write_results(Flock, Evaluate, config, repeat):
     print(len(Evaluate.voronoi_neighbours))
     print(len(Evaluate.dists_to_target))
     print(len([i for i in range(config.run_time)]))
-    dfresults = pd.DataFrame({'t':[i for i in range(config.run_time)],
+    dfresults = {'t':[i for i in range(config.run_time)],
                               'flock_dists':Evaluate.flock_dists,
                               'AUVs in Feature':Evaluate.AUVs_in_feature,
                               'vor_neighbours':Evaluate.voronoi_neighbours,
-                              'dist_to_target':Evaluate.dists_to_target})
+                              'dist_to_target':Evaluate.dists_to_target}
 
     # headers = ['t', 'flock_dists', 'AUVs in Feature', 'No of Vor Nbours', 'dist_to_target']
     # for AUV in Flock:
@@ -62,15 +62,16 @@ def write_results(Flock, Evaluate, config, repeat):
     # temp.append(Evaluate.dists_to_target)
 
     for AUV in Flock:
-        dfresults['x%i' % AUV.ID] = AUV.log.x
-        dfresults['y%i' % AUV.ID] = AUV.log.y
-        dfresults['z%i' % AUV.ID] = AUV.log.z
-        dfresults['m%i' % AUV.ID] = AUV.log.measurement
+        print(len(AUV.log.x))
+        dfresults.update({'x%i' % AUV.ID:AUV.log.x[0:-1]})
+        dfresults.update({'y%i' % AUV.ID:AUV.log.y[0:-1]})
+        dfresults.update({'z%i' % AUV.ID:AUV.log.z[0:-1]})
+        dfresults.update({'m%i' % AUV.ID:AUV.log.measurement[0:-1]})
         # temp.append(AUV.log.y)
         # temp.append(AUV.log.z)
         # temp.append(AUV.log.measurement)
 
-    dfresults.to_csv(filename)
+    pd.DataFrame(dfresults).to_csv(filename)
 
     # temp = np.array(temp)
     # temp = np.transpose(temp)
