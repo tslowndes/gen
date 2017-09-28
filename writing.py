@@ -7,7 +7,7 @@ from dist import dist
 from find_dir import *
 import getpass
 import os
-from latlon_util import find_dir, find_dist2, find_dist3
+import pandas as pd
 
 def get_file_number(path):
     inds = []
@@ -25,46 +25,23 @@ def get_file_number(path):
 
 def write_results(Flock, Evaluate, config, repeat):
     filename = 'results/sim_%03i' % config.no
-    count = get_file_number(filename)
     filename = filename + '/result_%i.csv' % repeat
     print(filename)
-    if getpass.getuser() == 'tsl1g12' and os.path.exists('/noc/users/tsl1g12'):
-        f = open(filename, 'wb')
-    else:
-        f = open(filename, 'w', newline='')
-    wr = csv.writer(f)
 
-    headers = ['t', 'flock_dists', 'AUVs in Feature', 'No of Vor Nbours', 'dist_to_target']
-    for AUV in Flock:
-        headers.append('x%i' % AUV.ID)
-        headers.append('y%i' % AUV.ID)
-        headers.append('z%i' % AUV.ID)
-        headers.append('m%i' % AUV.ID)
-    wr.writerow(headers)
-
-    temp = [[i for i in range(len(Flock[0].log.x))]]
-    Evaluate.flock_dists.append(0)
-    Evaluate.AUVs_in_feature.append(0)
-    Evaluate.voronoi_neighbours.append(0)
-    Evaluate.dists_to_target.append(0)
-    temp.append(Evaluate.flock_dists)
-    temp.append(Evaluate.AUVs_in_feature)
-    temp.append(Evaluate.voronoi_neighbours)
-    temp.append(Evaluate.dists_to_target)
+    dfresults = {'t':[i for i in range(config.run_time)],
+                              'flock_dists':Evaluate.flock_dists,
+                              'AUVs in Feature':Evaluate.AUVs_in_feature,
+                              'vor_neighbours':Evaluate.voronoi_neighbours,
+                              'dist_to_target':Evaluate.dists_to_target}
 
     for AUV in Flock:
-        temp.append(AUV.log.x)
-        temp.append(AUV.log.y)
-        temp.append(AUV.log.z)
-        temp.append(AUV.log.measurement)
+        dfresults.update({'x%i' % AUV.ID:AUV.log.x[0:-1]})
+        dfresults.update({'y%i' % AUV.ID:AUV.log.y[0:-1]})
+        dfresults.update({'z%i' % AUV.ID:AUV.log.z[0:-1]})
+        dfresults.update({'m%i' % AUV.ID:AUV.log.measurement[0:-1]})
 
-    temp = np.array(temp)
-    temp = np.transpose(temp)
 
-    for i in range(len(temp)):
-        wr.writerow(temp[i])
-
-    f.close()
+    pd.DataFrame(dfresults).to_csv(filename)
 
 def write_solo(AUV, config):
     filename = 'results/sim_%03i' % config.no + '/solo.csv'
@@ -115,12 +92,12 @@ def  write_proof(AUV, config, fn = ' '):
     wr = csv.writer(f)
     headers = ['t']
 
-    headers.append('lon')
-    headers.append('lat')
+    headers.append('x')
+    headers.append('y')
     headers.append('z')
 
-    headers.append('wp_lon')
-    headers.append('wp_lat')
+    headers.append('wp_x')
+    headers.append('wp_y')
     headers.append('wp_z')
     headers.append('dist_to_wp')
     headers.append('state')
@@ -144,20 +121,19 @@ def  write_proof(AUV, config, fn = ' '):
 
     wr.writerow(headers)
     start_ind = 0
-    temp = [[] for i in range(len(AUV.log.lon))]
-    for i in range(len(AUV.log.lon)):
+    temp = [[] for i in range(len(AUV.log.x))]
+    for i in range(len(AUV.log.x)):
         # time
         temp[i].append(i)
         # position
-        temp[i].append(AUV.log.lon[i])
-        temp[i].append(AUV.log.lat[i])
+        temp[i].append(AUV.log.x[i])
+        temp[i].append(AUV.log.y[i])
         temp[i].append(AUV.log.z[i])
         # current waypoint
-        temp[i].append(AUV.log.lon_demand[i])
-        temp[i].append(AUV.log.lat_demand[i])
+        temp[i].append(AUV.log.x_demand[i])
+        temp[i].append(AUV.log.y_demand[i])
         temp[i].append(AUV.log.z_demand[i])
-        dist2wp = find_dist2((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i]))
-        temp[i].append(dist2wp)
+        temp[i].append(dist([AUV.log.x[i], AUV.log.y[i], AUV.log.z[i]], [AUV.log.x_demand[i], AUV.log.y_demand[i], AUV.log.z_demand[i]], 2))
 
         # time spent underwater
         temp[i].append(AUV.log.state[i])
@@ -170,14 +146,14 @@ def  write_proof(AUV, config, fn = ' '):
             temp[i].append(AUV.log.v[0])
         else:
             # Calculated velocity
-            temp[i].append(find_dist3((AUV.log.lon[i], AUV.log.lat[i], AUV.log.z[i]), (AUV.log.lon[i - 1], AUV.log.lat[i - 1], AUV.log.z[i - 1])) / 0.5)
+            temp[i].append(dist([AUV.log.x[i], AUV.log.y[i], AUV.log.z[i]], [AUV.log.x[i - 1], AUV.log.y[i - 1], AUV.log.z[i - 1]], 3) / 0.5)
 
         #### Yaw
         temp[i].append(AUV.log.yaw[i])
         temp[i].append(AUV.log.yaw_demand[i])
         #### Calculated yaw demand
-        if AUV.log.lon[i] != AUV.log.lon_demand[i] or AUV.log.lat[i] != AUV.log.lat_demand[i]:
-            temp[i].append(find_dir((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i])))
+        if AUV.log.x[i] != AUV.log.x_demand[i] or AUV.log.y[i] != AUV.log.y_demand[i]:
+            temp[i].append(find_dir(AUV.log.x[i], AUV.log.y[i], AUV.log.x_demand[i], AUV.log.y_demand[i]))
         else:
             temp[i].append(temp[i][-1])
 
@@ -198,7 +174,7 @@ def  write_proof(AUV, config, fn = ' '):
         temp[i].append(AUV.log.pitch_demand[i])
 
         # Pitch demand calc
-        dist_xy = find_dist2((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i]))
+        dist_xy = dist([AUV.log.x[i], AUV.log.y[i]], [AUV.log.x_demand[i], AUV.log.y_demand[i]], 2)
         if dist_xy == 0 and AUV.log.z[i] == AUV.log.z_demand[i]:
             p_demand = 0
         elif dist_xy == 0 and AUV.log.z[i] != AUV.log.z_demand[i]:
