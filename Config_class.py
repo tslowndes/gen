@@ -11,11 +11,9 @@ class sim_config:
                     for item in row[1][1:-2].split(','):
                         temp.append(int(item))
                     setattr(self,row[0], temp)
-                elif row[0] == 'start_box_se' or row[0] == 'start_box_nw':
-                    temp = []
-                    for item in row[1][1:-2].split(','):
-                        temp.append(float(item))
-                    setattr(self,row[0], temp)
+                elif (row[0] == 'start_box_se_lat' or row[0] == 'start_box_nw_lat'
+                      or row[0] == 'start_box_nw_lon' or row[0] == 'start_box_nw_lon'):
+                    setattr(self, row[0], np.float64(row[1]))
                 else:
                     try:
                         setattr(self, row[0], int(row[1]))
