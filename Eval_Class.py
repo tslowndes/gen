@@ -1,9 +1,7 @@
-import sys
-sys.path.insert(0, "/noc/users/tsl1g12/gen")
-sys.path.insert(0, 'C:/users/tsl1g12/desktop/phd_sim/gen')
-sys.path.insert(0, 'D:/Desktop/PhD_sim/PhD_sim/gen')
 import numpy as np
 from scipy.spatial import Voronoi, voronoi_plot_2d
+
+from latlon_util import find_dist2, find_dist3, find_relative
 from dist import dist
 from numba import jitclass
 
@@ -34,10 +32,19 @@ class Evaluator:
         for AUV in Flock:
             n_reg = []
 
-            loc_vehicles = np.append(AUV.loc_pos[np.where(AUV.loc_vehicles == 1)[0]][:, 0:2], np.reshape([AUV.x, AUV.y],(1,2)), axis = 0 )
+            loc_vehicles = AUV.loc_pos[np.where(AUV.loc_vehicles == 1)[0]][:, 0:2]
+            # Converts from lat lon to relative position
+            AUV_pos = (AUV.lon, AUV.lat)
+            rellocs = []
+            for loc in loc_vehicles:
+                rellocs.append(find_relative(AUV_pos, loc))
+            rellocs.append((0,0))
+            loc_vehicles = np.array(rellocs)
+
+
             v_region = Voronoi(loc_vehicles, qhull_options='Qbb Qc Qx')
 
-            ind = np.where(loc_vehicles == [AUV.x, AUV.y])[0][0]
+            ind = np.where(loc_vehicles == np.array([0,0]))[0][0]
             # Find AUVs Region
             reg_ind = v_region.point_region[ind]
             # Find vertices of AUVs region
@@ -67,7 +74,7 @@ class Evaluator:
             # plt.show()
 
             # Take the mean of the distances to vehicles in neighbouring regions
-            dists = [dist([AUV.x, AUV.y], loc_vehicles[np.where(v_region.point_region == n)[0][0]], 2) for n in n_reg]
+            dists = [dist([0,0], loc_vehicles[np.where(v_region.point_region == n)[0][0]], 2) for n in n_reg]
 
             if 0 in dists:
                 dists.remove(0)
@@ -89,7 +96,7 @@ class Evaluator:
     def dist_to_target(self, Flock):
         dists = []
         for AUV in Flock:
-            dists.append(dist([AUV.x, AUV.y, AUV.z], AUV.waypoints[0], 3))
+            dists.append(find_dist3([AUV.lon, AUV.lat, AUV.z], AUV.waypoints[0]))
         self.dists_to_target.append(np.mean(dists))
 
     def settling_time(self, config):

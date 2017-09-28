@@ -22,7 +22,6 @@ def get_file_number(path):
     else:
         return 0
 
-
 def write_results(Flock, Evaluate, config, repeat):
     filename = 'results/sim_%03i' % config.no
     filename = filename + '/result_%i.csv' % repeat
@@ -35,8 +34,8 @@ def write_results(Flock, Evaluate, config, repeat):
                               'dist_to_target':Evaluate.dists_to_target}
 
     for AUV in Flock:
-        dfresults.update({'x%i' % AUV.ID:AUV.log.x[0:-1]})
-        dfresults.update({'y%i' % AUV.ID:AUV.log.y[0:-1]})
+        dfresults.update({'lon%i' % AUV.ID:AUV.log.lon[0:-1]})
+        dfresults.update({'lat%i' % AUV.ID:AUV.log.lat[0:-1]})
         dfresults.update({'z%i' % AUV.ID:AUV.log.z[0:-1]})
         dfresults.update({'m%i' % AUV.ID:AUV.log.measurement[0:-1]})
 

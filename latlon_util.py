@@ -1,5 +1,7 @@
 import numpy as np
 from math import floor
+
+
 def find_dir(pos1, pos2):
     lon1, lat1 = np.radians(pos1)
     lon2, lat2 = np.radians(pos2)
@@ -44,6 +46,11 @@ def find_relative(datum, loc):
     # finds change in lon and lat using haversine formula to determine loc relative to datum
     dlon = find_dist2(loc1, (loc2[0], loc1[1]))
     dlat = find_dist2(loc1, (loc1[0], loc2[1]))
+
+    if loc[0] < datum[0]:
+        dlon = -1 * dlon
+    if loc[1] < datum[1]:
+        dlat = -1 * dlat
 
     relloc2 = (dlon, dlat)
 
