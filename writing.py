@@ -55,7 +55,7 @@ def  write_proof(AUV, config, fn = ' '):
         else:
             filename = fn
 
-    dfresults = {'t':[i for i in range(config.run_time)],
+    dfresults = {'t':[i for i in range(config.run_time+1)],
                  'lat':AUV.log.lat,
                  'lon':AUV.log.lon,
                  'z':AUV.log.z,
@@ -70,11 +70,11 @@ def  write_proof(AUV, config, fn = ' '):
                  'yaw_demand':AUV.log.yaw_demand,
                  'pitch':AUV.log.pitch,
                  'pitch_demand':AUV.log.pitch_demand,
-                 'sat_times':AUV.log.sat_time_stamps + [0 for i in range(config.run_time - lan(AUV.log.sat_time_stamps))]}
+                 'sat_times':AUV.log.sat_time_stamps + [0 for i in range(config.run_time - len(AUV.log.sat_time_stamps) + 1)]}
 
-    dist_to_wp, v_calc, yr_calc, yd_calc, pd_calc, pr_calc = np.zeros((len(AUV.log.x),6))
+    dist_to_wp, v_calc, yr_calc, yd_calc, pd_calc, pr_calc = np.zeros((6, len(AUV.log.lat)))
 
-    for i in range(len(AUV.log.x)):
+    for i in range(len(AUV.log.lon)):
         dist_to_wp[i] = find_dist3((AUV.log.lon[i], AUV.log.lat[i], AUV.log.z[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i], AUV.log.z_demand[i]))
 
         if i ==0:
@@ -88,7 +88,7 @@ def  write_proof(AUV, config, fn = ' '):
             if AUV.log.yaw[i-1] > 350 and AUV.log.yaw[i] < 10:
                 yr_calc[i] = (AUV.log.yaw[i] - (AUV.log.yaw[i-1] - 360)) / config.run_time
             elif AUV.log.yaw[i-1] < 10 and AUV.log.yaw[i] > 350:
-                yr_calc[i] = (AUV.log.yaw[i] - 360) - AUV.log.yaw[i-1]) /  config.run_time
+                yr_calc[i] = ((AUV.log.yaw[i] - 360) - AUV.log.yaw[i-1]) /  config.run_time
             else:
                 yr_calc[i] = (AUV.log.yaw[i] - AUV.log.yaw[i-1])/ config.run_time
 
@@ -108,7 +108,7 @@ def  write_proof(AUV, config, fn = ' '):
         if dist_xy == 0 and AUV.log.z[i] != AUV.log.z_demand[i]:
             pd_calc[i] = AUV.config.max_pitch
         else:
-            pd_calc[i] = degrees(atan(( AUV.log.z_demand[i] - AUV.log.z[i] ) / dist_xy))
+            pd_calc[i] = degrees(atan((AUV.log.z_demand[i] - AUV.log.z[i]) / dist_xy))
             if abs(pd_calc[i]) > AUV.config.max_pitch:
                 pd_calc[i] = (abs(pd_calc[i]) / pd_calc[i]) * AUV.config.max_pitch
         pd_calc[i] = -1*pd_calc[i]
