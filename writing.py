@@ -40,6 +40,15 @@ def write_results(Flock, Evaluate, config, repeat):
 
     pd.DataFrame(dfresults).to_csv(filename)
 
+def write_vehicle_perspective(AUV, config, repeat):
+    df = {}
+    loc_pos = np.array(AUV.log.loc_pos)
+    for i in range(config.swarm_size):
+        df.update({'lat%i' % i:loc_pos[:,i][:,1]})
+        df.update({'lon%i' % i:loc_pos[:,i][:,0]})
+        df.update({'z%i' % i:loc_pos[:,i][:,2]})
+    pd.DataFrame(df).to_csv('results/sim_%03i/svp_%03i.csv' % (config.no, repeat))
+
 def  write_proof(AUV, config, fn = ' '):
     if config.sim_type == 1:
         if config.sim_sub_type == 1:
