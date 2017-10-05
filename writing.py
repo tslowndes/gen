@@ -129,5 +129,8 @@ def  write_proof(AUV, config, fn = ' '):
     dfresults.update({'yaw_rate_calc': yr_calc})
     dfresults.update({'v_calc': v_calc})
 
+    ### For checking lengths of all keys if making the data frame errors due to array length
+    # print([len(v) for v in dfresults.values()])
+
     pd.DataFrame(dfresults).to_csv(filename)
 
