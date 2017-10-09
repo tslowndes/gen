@@ -1,6 +1,8 @@
+import sys
+sys.path.insert(0, '../Voronoi/3D')
 import numpy as np
 from scipy.spatial import Voronoi, voronoi_plot_2d
-
+from VoronoiFlock import find_vor_neighbours
 from latlon_util import find_dist2, find_dist3, find_relative
 from dist import dist
 from numba import jitclass
@@ -41,40 +43,10 @@ class Evaluator:
             rellocs.append((0,0))
             loc_vehicles = np.array(rellocs)
 
-
-            v_region = Voronoi(loc_vehicles, qhull_options='Qbb Qc Qx')
-
-            ind = np.where(loc_vehicles == np.array([0,0]))[0][0]
-            # Find AUVs Region
-            reg_ind = v_region.point_region[ind]
-            # Find vertices of AUVs region
-            vert_ind = v_region.regions[reg_ind]
-            # Which regions are joined by these vertices
-            for reg in v_region.regions:
-                check = []
-                for vert in reg:
-                    # if a region has a vertex -1 it means it is an external region
-                    # Before excluding this it would think all external regions were neighbours because they all had the vertex -1
-                    if vert != -1:
-                        if vert in vert_ind:
-                            check.append(1)
-                        else:
-                            check.append(0)
-                    else:
-                        check.append(0)
-                # check must include at least 1 0, if check is all 1s it uses all the same vertices as the current region i.e. it is the current region
-                if 0 in check and 1 in check:
-                    n_reg.append(v_region.regions.index(reg))
-
-            # voronoi_plot_2d(v_region)
-            # plt.scatter(np.array(loc_vehicles)[:,0], np.array(loc_vehicles)[:,1])
-            # plt.scatter(AUV.x, AUV.y, facecolor = 'r', marker = 'x', linewidth = 10)
-            # for n in n_reg:
-            #     plt.plot([AUV.x, loc_vehicles[np.where(v_region.point_region==n)[0][0]][0]], [AUV.y, loc_vehicles[np.where(v_region.point_region==n)[0][0]][1]])
-            # plt.show()
+            vor_neighbours = find_vor_neighbours(loc_vehicles)
 
             # Take the mean of the distances to vehicles in neighbouring regions
-            dists = [dist([0,0], loc_vehicles[np.where(v_region.point_region == n)[0][0]], 2) for n in n_reg]
+            dists = [dist([0,0], pos, 2) for pos in vor_neighbours]
 
             if 0 in dists:
                 dists.remove(0)

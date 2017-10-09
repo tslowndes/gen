@@ -1,6 +1,4 @@
 import numpy as np
-from math import floor
-
 
 def find_dir(pos1, pos2):
     lon1, lat1 = np.radians(pos1)
@@ -23,7 +21,7 @@ def find_dist2(pos1, pos2):
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = (np.sin(dlat / 2)** 2) + (np.cos(lat1) * np.cos(lat2) * (np.sin(dlon / 2) ** 2))
-    r = 6378.137 * 1000  # Radius of earth in kilometers
+    r = 6378.1 * 1000  # Radius of earth in kilometers
     d = 2 * r * np.arcsin(np.sqrt(a))
     return d
 
@@ -55,3 +53,18 @@ def find_relative(datum, loc):
     relloc2 = (dlon, dlat)
 
     return relloc2
+
+def find_new_pos(pos, dist, brng):
+    R = 6378.1 #Radius of the Earth
+    d = dist / 1000
+    brng = np.radians(brng)
+    lat1 = np.radians(pos[1])
+    lon1 = np.radians(pos[0])
+
+    lat2 = np.arcsin( np.sin(lat1)*np.cos(d/R) +
+                 np.cos(lat1)*np.sin(d/R)*np.cos(brng))
+
+    lon2 = lon1 + np.arctan2(np.sin(brng)*np.sin(d/R)*np.cos(lat1),
+                         np.cos(d/R)-np.sin(lat1)*np.sin(lat2))
+
+    return (np.degrees(lon2), np.degrees(lat2))
