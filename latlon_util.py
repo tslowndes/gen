@@ -56,7 +56,7 @@ def find_relative(datum, loc):
 
 def find_new_pos(pos, dist, brng):
     R = 6378.1 #Radius of the Earth
-    d = dist / 1000
+    d = dist / 1000.0
     brng = np.radians(brng)
     lat1 = np.radians(pos[1])
     lon1 = np.radians(pos[0])
@@ -66,5 +66,4 @@ def find_new_pos(pos, dist, brng):
 
     lon2 = lon1 + np.arctan2(np.sin(brng)*np.sin(d/R)*np.cos(lat1),
                          np.cos(d/R)-np.sin(lat1)*np.sin(lat2))
-
     return (np.degrees(lon2), np.degrees(lat2))
