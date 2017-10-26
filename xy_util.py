@@ -19,9 +19,4 @@ def find_dir(pos1, pos2):
             return theta + 360
 
 def find_dist(pos1, pos2):
-
-
-pos1 = np.array([10,10])
-pos2 = np.array([20,10])
-
-np.sqrt(np.sum((pos1 - pos2))**2)
+    return np.sqrt(np.sum((pos1 - pos2)**2))

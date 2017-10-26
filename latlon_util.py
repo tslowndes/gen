@@ -21,7 +21,7 @@ def find_dist2(pos1, pos2):
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     a = (np.sin(dlat / 2)** 2) + (np.cos(lat1) * np.cos(lat2) * (np.sin(dlon / 2) ** 2))
-    r = 6378.1 * 1000  # Radius of earth in kilometers
+    r =  6371 * 1000  # Radius of earth in kilometers
     d = 2 * r * np.arcsin(np.sqrt(a))
     return d
 
@@ -55,7 +55,7 @@ def find_relative(datum, loc):
     return relloc2
 
 def find_new_pos(pos, dist, brng):
-    R = 6378.1 #Radius of the Earth
+    R = 6371 #Radius of the Earth
     d = dist / 1000.0
     brng = np.radians(brng)
     lat1 = np.radians(pos[1])
@@ -67,3 +67,10 @@ def find_new_pos(pos, dist, brng):
     lon2 = lon1 + np.arctan2(np.sin(brng)*np.sin(d/R)*np.cos(lat1),
                          np.cos(d/R)-np.sin(lat1)*np.sin(lat2))
     return (np.degrees(lon2), np.degrees(lat2))
+
+def calc_rhombus(start_pos, d):
+    locs = []
+    locs.append(find_new_pos(start_pos, 50, 90))
+    locs.append(find_new_pos(start_pos, 50, 150))
+    locs.append(find_new_pos(locs[-1], 50, 90))
+    return locs
