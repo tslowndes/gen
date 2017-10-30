@@ -4,22 +4,65 @@ import numpy as np
 
 def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
-    swarm_size_range = (5, 30)
-    sep_dists = [50,75,100,125,150,175,200,225,250]
-    sim_no = 0
 
-    for d in sep_dists:
-        config.no = sim_no
+    sim_no = 36
 
+    for i in range(0,1):
+
+        # 0:Sat only, 1:Acc & Sat, 2:Ideal
         config.comms = 0
-        config.dive_depth = 0
-        config.sim_sub_type = 1
-        config.t_uw = 120
+        # Range of accoustic communication
+        config.comms_range = 500
+
+        # Desired separation for voronoi algorithm in meters
+        config.desired_d = 250
+        # Dive depth for dive profile in meters
+        config.dive_depth = -50
+        # Max distance travelled between current location and waypoint in meters
+        config.dive_dist = 200
+
+        # Is the vehicle monitoring the feature
+        config.feature_monitoring = 0
+        # Is the feature moving?
+        config.feature_move = 0
+
+        # Fix locations for all vehicles but 0
+        config.fixed = 0
+        # sim identification number
+        config.no = sim_no
+        # Number of repeats to perform
         config.repeats = 10
-        config.run_time = 5000
-        config.swarm_size = 4
-        config.seed = [0, 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
-        config.desired_d = d
+        # Max run_time for simulation run
+        config.run_time = 10000
+
+        # Random seed for starting locations, paired seeds
+        config.seed = [0, 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 25, 27, 28, 29, 30, 31,
+                       32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
+
+        # 0:1 = surface ops, 1:1-3 = validation scripts
+        config.sim_sub_type = 0
+        # Type 0 = normal, 1 = validation
+        config.sim_type = 0
+
+        # Number of vehicles in the swarm
+        config.swarm_size = 10
+
+        # TDMA frame length
+        config.t_acc = 0.5 * i
+        # time delay on surface simulating time required to attain satellite fix
+        config.t_sat = 180
+        # timeout
+        config.t_uw = 1200
+
+        # Time step length in seconds
+        config.time_step = 0.5
+
+        # Defining the start box in which the AUVs starting positions are randomly seeded
+        config.start_box_nw_lat = -2.4220
+        config.start_box_nw_lon = 51.2458
+        config.start_box_se_lat = -2.4219
+        config.start_box_se_lon = 51.2457
+
         filename = '../Voronoi/3D/config/sim_config_%03i.csv' % sim_no
         write_class_attributes(config, filename)
 

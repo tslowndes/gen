@@ -68,9 +68,16 @@ def find_new_pos(pos, dist, brng):
                          np.cos(d/R)-np.sin(lat1)*np.sin(lat2))
     return (np.degrees(lon2), np.degrees(lat2))
 
-def calc_rhombus(start_pos, d):
+def calc_rhombus_E(start_pos, d):
     locs = []
     locs.append(find_new_pos(start_pos, 50, 90))
     locs.append(find_new_pos(start_pos, 50, 150))
     locs.append(find_new_pos(locs[-1], 50, 90))
+    return locs
+
+def calc_rhombus_N(start_pos, d):
+    locs = []
+    locs.append(find_new_pos(start_pos, 50, 0))
+    locs.append(find_new_pos(start_pos, 50, 60))
+    locs.append(find_new_pos(locs[-1], 50, 0))
     return locs
