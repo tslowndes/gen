@@ -5,12 +5,12 @@ import numpy as np
 def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
 
-    sim_no = 36
-
-    for i in range(0,1):
+    sim_no = 0
+    comms = 2
+    for i in range(5,21):
 
         # 0:Sat only, 1:Acc & Sat, 2:Ideal
-        config.comms = 0
+        config.comms = comms
         # Range of accoustic communication
         config.comms_range = 500
 
@@ -33,7 +33,7 @@ def main_set_up():
         # Number of repeats to perform
         config.repeats = 10
         # Max run_time for simulation run
-        config.run_time = 10000
+        config.run_time = 5000
 
         # Random seed for starting locations, paired seeds
         config.seed = [0, 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 25, 27, 28, 29, 30, 31,
@@ -45,10 +45,10 @@ def main_set_up():
         config.sim_type = 0
 
         # Number of vehicles in the swarm
-        config.swarm_size = 10
+        config.swarm_size = i
 
         # TDMA frame length
-        config.t_acc = 0.5 * i
+        config.t_acc = 0.5
         # time delay on surface simulating time required to attain satellite fix
         config.t_sat = 180
         # timeout
@@ -73,7 +73,8 @@ def write_class_attributes(wr_class, filename):
     attributes = [i for i in dir(wr_class) if '__' not in i]
     attributes.remove('read_config')
 
-    f = open(filename, 'w', newline='')
+    # f = open(filename, 'w', newline='')
+    f = open(filename, 'w')
     wr = csv.writer(f)
     for attr in attributes:
         wr.writerow([attr, getattr(wr_class, attr)])
