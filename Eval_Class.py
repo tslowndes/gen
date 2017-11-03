@@ -5,7 +5,6 @@ from scipy.spatial import Voronoi, voronoi_plot_2d
 from VoronoiFlock import find_vor_neighbours
 from latlon_util import find_dist2, find_dist3, find_relative
 from dist import dist
-from numba import jitclass
 
 class Evaluator:
 

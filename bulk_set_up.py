@@ -1,6 +1,7 @@
 from Config_class import *
 import csv
 import numpy as np
+from math import ceil
 
 def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
@@ -12,14 +13,17 @@ def main_set_up():
         # 0:Sat only, 1:Acc & Sat, 2:Ideal
         config.comms = comms
         # Range of accoustic communication
-        config.comms_range = 500
+        if config.comms == 2:
+            config.comms_range = 9999999999999999999
+        else:
+            config.comms_range = 500
 
         # Desired separation for voronoi algorithm in meters
         config.desired_d = 250
         # Dive depth for dive profile in meters
         config.dive_depth = -50
         # Max distance travelled between current location and waypoint in meters
-        config.dive_dist = 200
+        config.dive_dist = 0.5
 
         # Is the vehicle monitoring the feature
         config.feature_monitoring = 0
@@ -67,6 +71,22 @@ def main_set_up():
         write_class_attributes(config, filename)
 
         sim_no += 1
+
+    gen_bash_script(sim_no)
+
+def gen_bash_script(sim_no):
+    # we want to use 8 cores concurrently, we need 8 start files...
+    # no we don't because we can launch the bulk function in start.py with arguments
+    sims_per_core = ceil(sim_no / 8.0)
+
+    with open('../Voronoi/3D/run_me.sh', 'w') as bashfile:
+        start_sim = 0
+        while start_sim < sim_no:
+            end_sim = start_sim + sims_per_core
+            if end_sim > sim_no:
+                end_sim = sim_no
+            bashfile.write('python start.py %i %i & \n' % (start_sim, end_sim))
+            start_sim = end_sim
 
 
 def write_class_attributes(wr_class, filename):
