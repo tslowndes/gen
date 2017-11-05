@@ -7,7 +7,7 @@ def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
 
     sim_no = 0
-    comms = 2
+    comms = 1
     for i in range(5,21):
 
         # 0:Sat only, 1:Acc & Sat, 2:Ideal
@@ -23,7 +23,7 @@ def main_set_up():
         # Dive depth for dive profile in meters
         config.dive_depth = -50
         # Max distance travelled between current location and waypoint in meters
-        config.dive_dist = 0.5
+        config.dive_dist = 250
 
         # Is the vehicle monitoring the feature
         config.feature_monitoring = 0
@@ -37,7 +37,7 @@ def main_set_up():
         # Number of repeats to perform
         config.repeats = 10
         # Max run_time for simulation run
-        config.run_time = 5000
+        config.run_time = 10000
 
         # Random seed for starting locations, paired seeds
         config.seed = [0, 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 25, 27, 28, 29, 30, 31,
@@ -52,7 +52,7 @@ def main_set_up():
         config.swarm_size = i
 
         # TDMA frame length
-        config.t_acc = 0.5
+        config.t_acc = 4.0
         # time delay on surface simulating time required to attain satellite fix
         config.t_sat = 180
         # timeout
