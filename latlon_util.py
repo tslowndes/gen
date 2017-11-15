@@ -66,7 +66,7 @@ def find_new_pos(pos, dist, brng):
 
     lon2 = lon1 + np.arctan2(np.sin(brng)*np.sin(d/R)*np.cos(lat1),
                          np.cos(d/R)-np.sin(lat1)*np.sin(lat2))
-    return (np.degrees(lon2), np.degrees(lat2))
+    return [np.degrees(lon2), np.degrees(lat2)]
 
 def calc_rhombus_E(start_pos, d):
     locs = []

@@ -64,7 +64,7 @@ def  write_proof(AUV, config, fn = ' '):
         else:
             filename = fn
 
-    dfresults = {'t':[i for i in range(config.run_time+1)],
+    dfresults = {'t':[i for i in range(len(AUV.log.lat))],
                  'lat':AUV.log.lat,
                  'lon':AUV.log.lon,
                  'z':AUV.log.z,
@@ -79,7 +79,7 @@ def  write_proof(AUV, config, fn = ' '):
                  'yaw_demand':AUV.log.yaw_demand,
                  'pitch':AUV.log.pitch,
                  'pitch_demand':AUV.log.pitch_demand,
-                 'sat_times':AUV.log.sat_time_stamps + [0 for i in range(config.run_time - len(AUV.log.sat_time_stamps) + 1)]}
+                 'sat_times':AUV.log.sat_time_stamps + [0 for i in range(len(AUV.log.lat) - len(AUV.log.sat_time_stamps))]}
 
     dist_to_wp, v_calc, yr_calc, yd_calc, pd_calc, pr_calc = np.zeros((6, len(AUV.log.lat)))
 
@@ -110,25 +110,24 @@ def  write_proof(AUV, config, fn = ' '):
             # yd_calc.append(temp[i][-1])
 
 
-        # Pitch demand calc
-        dist_xy = find_dist2((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i]))
-        # if dist_xy == 0 and AUV.log.z[i] == AUV.log.z_demand[i]:
-        #     pd_calc[i] = 0
-        if dist_xy == 0 and AUV.log.z[i] != AUV.log.z_demand[i]:
-            pd_calc[i] = AUV.config.max_pitch
-        else:
-            pd_calc[i] = degrees(atan((AUV.log.z_demand[i] - AUV.log.z[i]) / dist_xy))
-            if abs(pd_calc[i]) > AUV.config.max_pitch:
-                pd_calc[i] = (abs(pd_calc[i]) / pd_calc[i]) * AUV.config.max_pitch
-        pd_calc[i] = -1*pd_calc[i]
+        # # Pitch demand calc
+        # dist_xy = find_dist2((AUV.log.lon[i], AUV.log.lat[i]), (AUV.log.lon_demand[i], AUV.log.lat_demand[i]))
+        # # if dist_xy == 0 and AUV.log.z[i] == AUV.log.z_demand[i]:
+        # #     pd_calc[i] = 0
+        # if dist_xy == 0 and AUV.log.z[i] != AUV.log.z_demand[i]:
+        #     pd_calc[i] = AUV.config.max_pitch
+        # else:
+        #     pd_calc[i] = degrees(atan((AUV.log.z_demand[i] - AUV.log.z[i]) / dist_xy))
+        #     if abs(pd_calc[i]) > AUV.config.max_pitch:
+        #         pd_calc[i] = (abs(pd_calc[i]) / pd_calc[i]) * AUV.config.max_pitch
+        # pd_calc[i] = -1*pd_calc[i]
 
-    dfresults.update({'pitch_demand_calc':pd_calc})
+    # dfresults.update({'pitch_demand_calc':pd_calc})
     dfresults.update({'pitch_rate_calc': pr_calc})
     dfresults.update({'dist_to_wp': dist_to_wp})
     dfresults.update({'yaw_demand_calc': yd_calc})
     dfresults.update({'yaw_rate_calc': yr_calc})
     dfresults.update({'v_calc': v_calc})
-
     ### For checking lengths of all keys if making the data frame errors due to array length
     # print([len(v) for v in dfresults.values()])
 

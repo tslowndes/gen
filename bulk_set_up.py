@@ -6,7 +6,7 @@ from math import ceil
 def main_set_up():
     config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
 
-    sim_no = 0
+    sim_no = 32
     comms = 1
     for i in range(5,21):
 
@@ -19,7 +19,7 @@ def main_set_up():
             config.comms_range = 500
 
         # Desired separation for voronoi algorithm in meters
-        config.desired_d = 250
+        config.desired_d = 200
         # Dive depth for dive profile in meters
         config.dive_depth = -50
         # Max distance travelled between current location and waypoint in meters
@@ -35,7 +35,7 @@ def main_set_up():
         # sim identification number
         config.no = sim_no
         # Number of repeats to perform
-        config.repeats = 10
+        config.repeats = 20
         # Max run_time for simulation run
         config.run_time = 10000
 
@@ -52,7 +52,7 @@ def main_set_up():
         config.swarm_size = i
 
         # TDMA frame length
-        config.t_acc = 4.0
+        config.t_acc = 2.0
         # time delay on surface simulating time required to attain satellite fix
         config.t_sat = 180
         # timeout
@@ -64,8 +64,8 @@ def main_set_up():
         # Defining the start box in which the AUVs starting positions are randomly seeded
         config.start_box_nw_lat = -2.4220
         config.start_box_nw_lon = 51.2458
-        config.start_box_se_lat = -2.4219
-        config.start_box_se_lon = 51.2457
+        config.start_box_se_lat = -2.4215
+        config.start_box_se_lon = 51.2455
 
         filename = '../Voronoi/3D/config/sim_config_%03i.csv' % sim_no
         write_class_attributes(config, filename)
