@@ -8,8 +8,9 @@ def main_set_up():
 
     sim_no = 0
     comms = 0
-    t_uws = [120,240,360,480,600,1200]
-    for t in t_uws:
+    # t_uws = [120,240,360,480,600,1200]
+    ds = [50, 60, 70, 80, 90, 100]
+    for d in ds:
 
         # 0:Sat only, 1:Acc & Sat, 2:Ideal
         config.comms = comms
@@ -20,9 +21,9 @@ def main_set_up():
             config.comms_range = 500
 
         # Desired separation for voronoi algorithm in meters
-        config.desired_d = 50
+        config.desired_d = d
         # Dive depth for dive profile in meters
-        config.dive_depth = -50
+        config.dive_depth = 0
         # Max distance travelled between current location and waypoint in meters
         config.dive_dist = 250
 
@@ -32,13 +33,13 @@ def main_set_up():
         config.feature_move = 0
 
         # Fix locations for all vehicles but 0
-        config.fixed = 1
+        config.fixed = 0
         # sim identification number
         config.no = sim_no
         # Number of repeats to perform
         config.repeats = 1
         # Max run_time for simulation run
-        config.run_time = 10000
+        config.run_time = 5000
 
         # Random seed for starting locations, paired seeds
         config.seed = [0, 1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 25, 27, 28, 29, 30, 31,
@@ -57,7 +58,7 @@ def main_set_up():
         # time delay on surface simulating time required to attain satellite fix
         config.t_sat = 180
         # timeout
-        config.t_uw = t
+        config.t_uw = 600
 
         # Time step length in seconds
         config.time_step = 0.5

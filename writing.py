@@ -47,7 +47,7 @@ def write_vehicle_perspective(AUV, config, repeat):
         df.update({'lat%i' % i:loc_pos[:,i][:,1]})
         df.update({'lon%i' % i:loc_pos[:,i][:,0]})
         df.update({'z%i' % i:loc_pos[:,i][:,2]})
-    pd.DataFrame(df).to_csv('results/sim_%03i/svp_%03i.csv' % (config.no, repeat))
+    pd.DataFrame(df).to_csv('results/sim_%03i/svp_%03i.csv' % (config.no, AUV.ID))
 
 def  write_proof(AUV, config, fn = ' '):
     if config.sim_type == 1:
