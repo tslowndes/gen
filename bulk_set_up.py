@@ -20,7 +20,7 @@ def main_set_up():
             config.comms_range = 500
 
         # Desired separation for voronoi algorithm in meters
-        config.desired_d = 200
+        config.desired_d = 50
         # Dive depth for dive profile in meters
         config.dive_depth = -50
         # Max distance travelled between current location and waypoint in meters
