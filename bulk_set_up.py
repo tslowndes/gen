@@ -4,11 +4,12 @@ import numpy as np
 from math import ceil
 
 def main_set_up():
-    config = sim_config('../Voronoi/3D/config/sim_config_DO_NOT_DELETE.csv')
+    config = sim_config('../voronoi/config/sim_config_DO_NOT_DELETE.csv')
 
-    sim_no = 32
-    comms = 1
-    for i in range(5,21):
+    sim_no = 0
+    comms = 0
+    t_uws = [120,240,360,480,600,1200]
+    for t in t_uws:
 
         # 0:Sat only, 1:Acc & Sat, 2:Ideal
         config.comms = comms
@@ -31,11 +32,11 @@ def main_set_up():
         config.feature_move = 0
 
         # Fix locations for all vehicles but 0
-        config.fixed = 0
+        config.fixed = 1
         # sim identification number
         config.no = sim_no
         # Number of repeats to perform
-        config.repeats = 20
+        config.repeats = 1
         # Max run_time for simulation run
         config.run_time = 10000
 
@@ -49,14 +50,14 @@ def main_set_up():
         config.sim_type = 0
 
         # Number of vehicles in the swarm
-        config.swarm_size = i
+        config.swarm_size = 4
 
         # TDMA frame length
         config.t_acc = 2.0
         # time delay on surface simulating time required to attain satellite fix
         config.t_sat = 180
         # timeout
-        config.t_uw = 1200
+        config.t_uw = t
 
         # Time step length in seconds
         config.time_step = 0.5
@@ -67,7 +68,7 @@ def main_set_up():
         config.start_box_se_lat = -2.4215
         config.start_box_se_lon = 51.2455
 
-        filename = '../Voronoi/3D/config/sim_config_%03i.csv' % sim_no
+        filename = '../voronoi/config/sim_config_%03i.csv' % sim_no
         write_class_attributes(config, filename)
 
         sim_no += 1
@@ -79,7 +80,7 @@ def gen_bash_script(sim_no):
     # no we don't because we can launch the bulk function in start.py with arguments
     sims_per_core = ceil(sim_no / 8.0)
 
-    with open('../Voronoi/3D/run_me.sh', 'w') as bashfile:
+    with open('../voronoi/run_me.sh', 'w') as bashfile:
         start_sim = 0
         while start_sim < sim_no:
             end_sim = start_sim + sims_per_core
