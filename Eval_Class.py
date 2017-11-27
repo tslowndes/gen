@@ -28,11 +28,9 @@ class Evaluator:
 
     # Average distance to voronoi neighbours & Number of voronoi neighbours
     def flock_dist(self, Flock):
-        n_regs = []
         loc_dists = []
+        n_nbrs = [] 
         for AUV in Flock:
-            n_reg = []
-
             loc_vehicles = AUV.loc_pos[np.where(AUV.loc_vehicles == 1)[0]][:, 0:2]
             # Converts from lat lon to relative position
             AUV_pos = (AUV.lon, AUV.lat)
@@ -50,10 +48,12 @@ class Evaluator:
             if 0 in dists:
                 dists.remove(0)
             loc_dists.append(np.median(dists))
+
             # Builds a list of the number of voronoi neighbours for each vehicle in the flock
-            n_regs.append(len(n_reg))
+            n_nbrs.append(len(vor_neighbours))
+
         self.flock_dists.append(np.median(loc_dists))
-        self.voronoi_neighbours.append(np.median(n_regs))
+        self.voronoi_neighbours.append(np.median(n_nbrs))
 
     # How many AUVs are in the feature - idea of how well feature tracking is working
     def AUV_in_feature(self, Flock):

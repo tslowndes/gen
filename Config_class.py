@@ -6,14 +6,16 @@ class sim_config:
         with open(config_file, 'r+') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                if row[0] == 'seed':
+                if row[0] == 'seed' or row[0] == 'fixed':
                     temp = []
-                    for item in row[1][1:-2].split(','):
+                    for item in row[1][1:-1].split(','):
                         temp.append(int(item))
                     setattr(self,row[0], temp)
+
                 elif (row[0] == 'start_box_se_lat' or row[0] == 'start_box_nw_lat'
                       or row[0] == 'start_box_nw_lon' or row[0] == 'start_box_nw_lon'):
                     setattr(self, row[0], np.float64(row[1]))
+
                 else:
                     try:
                         setattr(self, row[0], int(row[1]))
