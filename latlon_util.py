@@ -70,14 +70,14 @@ def find_new_pos(pos, dist, brng):
 
 def calc_rhombus_E(start_pos, d):
     locs = []
-    locs.append(find_new_pos(start_pos, 50, 90))
-    locs.append(find_new_pos(start_pos, 50, 150))
-    locs.append(find_new_pos(locs[-1], 50, 90))
+    locs.append(find_new_pos(start_pos, d, 90))
+    locs.append(find_new_pos(start_pos, d, 150))
+    locs.append(find_new_pos(locs[-1], d, 90))
     return locs
 
 def calc_rhombus_N(start_pos, d):
     locs = []
-    locs.append(find_new_pos(start_pos, 50, 0))
-    locs.append(find_new_pos(start_pos, 50, 60))
-    locs.append(find_new_pos(locs[-1], 50, 0))
+    locs.append(find_new_pos(start_pos, d, 0))
+    locs.append(find_new_pos(start_pos, d, 60))
+    locs.append(find_new_pos(locs[-1], d, 0))
     return locs
